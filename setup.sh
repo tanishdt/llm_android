@@ -27,14 +27,45 @@ cmake ..
 cmake --build . --config Release
 
 echo
-echo "✅ Llama.cpp build complete!"
+echo "📜 [STEP 6] Creating howtorun script..."
+cat <<'EOF' > ~/howtorun
+#!/bin/bash
+
+echo ""
+echo "📱 HOW TO RUN LLaMA MODELS ON ANDROID (UserLAnd Edition)"
+echo "────────────────────────────────────────────────────────"
+echo ""
+echo "📁 Step 1: Place your .gguf model file in:"
+echo "    ~/llm/"
+echo ""
+echo "🧠 Step 2: Run the model with a single prompt:"
+echo '    ~/llama.cpp/build/main -m ~/llm/your-model.gguf -p "You are a helpful assistant."'
+echo ""
+echo "💬 Step 3: To run in interactive chat mode:"
+echo '    ~/llama.cpp/build/main -m ~/llm/your-model.gguf -i'
+echo ""
+echo "📊 Optional flags:"
+echo "    --ctx-size 2048     # Increase context memory"
+echo "    --temp 0.7          # Control randomness"
+echo "    --repeat_penalty 1.1  # Improve coherence"
+echo ""
+echo "🛠 Troubleshooting:"
+echo "• DNS issue? Run:"
+echo '    echo \"nameserver 8.8.8.8\" | sudo tee /etc/resolv.conf'
+echo ""
+echo "• Memory error? Try a smaller model like Q2 or Q3."
+echo ""
+echo "────────────────────────────────────────────────────────"
+echo "🔥 You’re all set. Run your local LLM like a boss!"
+echo ""
+EOF
+
+chmod +x ~/howtorun
+
+echo
+echo "✅ Setup complete!"
 echo
 echo "🚀 NEXT STEPS:"
-echo "1️⃣ Move or download your .gguf model file into:"
-echo "    ~/llm/"
+echo "1️⃣ Drop your .gguf model in:  ~/llm/"
+echo "2️⃣ Run ./howtorun to see usage instructions"
 echo
-echo "2️⃣ Run it with:"
-echo '    ~/llama.cpp/build/main -m ~/llm/your-model.gguf -p "You are a helpful assistant."'
-echo
-echo "3️⃣ For chat mode:"
-echo '    ~/llama.cpp/build/main -m ~/llm/your-model.gguf -i'
