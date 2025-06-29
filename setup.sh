@@ -23,7 +23,7 @@ echo "🏗️  [STEP 5] Building llama.cpp with CMake..."
 cd ~/llama.cpp
 mkdir -p build
 cd build
-cmake ..
+cmake .. -DLLAMA_BUILD_MAIN=ON
 cmake --build . --config Release
 
 echo
