@@ -42,11 +42,8 @@ Launch it, create a new Ubuntu session, and set up a user+password.
 
 Now run:
 
-```bash
-sudo apt update && sudo apt install wget -y
-wget https://raw.githubusercontent.com/tanish.dt/llm_android/main/setup.sh
-chmod +x setup.sh
-./setup.sh
+```
+git clone https://github.com/tanishdt/llm_android.git && cd llm_android && bash setup.sh
 ```
 
 This will:
