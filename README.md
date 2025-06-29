@@ -1,84 +1,165 @@
-# 🧠 LLM on Android via UserLAnd – Run Mistral-7B with llama.cpp
+# 🤖 LLM on Android using llama.cpp (UserLAnd Setup)
 
-This project by [@tanishdt](https://github.com/tanishdt) lets you install and run a quantized LLM (like Mistral-7B) locally on your Android device using **UserLAnd** and [llama.cpp](https://github.com/ggerganov/llama.cpp).
+Run powerful **open-source LLMs like Mistral, LLaMA, TinyLLaMA, MythoMax, etc.** entirely on your **Android phone**, using [llama.cpp](https://github.com/ggerganov/llama.cpp) inside [UserLAnd](https://play.google.com/store/apps/details?id=tech.ula).
 
----
-
-## 📦 Features
-
-- Automatic install of dependencies (clang, cmake, git, etc.)
-- Clones and builds `llama.cpp` with RAM-optimized flags
-- Includes a helper script to download the Mistral-7B quantized model (Q4_K_M)
+This setup works **completely offline** after model download and is ideal for:
+- Privacy-focused users
+- Developers and students
+- Offline assistants
+- On-the-go LLM demos
 
 ---
 
-## ⚙️ Setup
+## 🚀 What This Repo Does
 
-### Run this one-liner inside your UserLAnd terminal:
+This repo contains a single script: `setup.sh` that:
 
-```bash
-wget https://raw.githubusercontent.com/tanishdt/llm_android/main/setup.sh -O setup.sh && bash setup.sh
-```
-
----
-
-## ✅ After Setup
-
-### 1. Download the model (Mistral 7B - Q4_K_M)
-
-```bash
-bash ~/llm/install_mistral.sh
-```
-
-> If DNS fails, fix it with:
-```bash
-sudo rm -f /etc/resolv.conf
-echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
-```
+✅ Installs all dependencies  
+✅ Clones and builds `llama.cpp` via CMake  
+✅ Prepares a clean `~/llm` folder for your `.gguf` models  
+✅ Generates a `howtorun` helper script for easy reference  
 
 ---
 
-### 2. Run the model
+## 📲 Requirements
 
-#### 🔹 Run a single prompt:
+- Android phone (2GB+ RAM recommended, 6GB+ ideal)
+- [UserLAnd app](https://play.google.com/store/apps/details?id=tech.ula)
+- Active Ubuntu session inside UserLAnd (18.04+ or 22.04 preferred)
+- 4–8 GB storage free for models
+
+---
+
+## ⚙️ Installation Steps
+
+### 1. Install UserLAnd from Play Store
+
+Launch it, create a new Ubuntu session, and set up a user+password.
+
+---
+
+### 2. Open terminal inside Ubuntu in UserLAnd
+
+Now run:
 
 ```bash
-cd ~/llama.cpp
-./main -m ./models/mistral-7b.Q4_K_M.gguf -p "Hello!"
+sudo apt update && sudo apt install wget -y
+wget https://raw.githubusercontent.com/tanish.dt/llm_android/main/setup.sh
+chmod +x setup.sh
+./setup.sh
 ```
 
-#### 🔹 Run in interactive mode:
-
-```bash
-./main -m ./models/mistral-7b.Q4_K_M.gguf -i
-```
+This will:
+- Install packages
+- Clone llama.cpp
+- Build it with CMake
+- Create `~/llm` folder for your model(s)
+- Add a `howtorun` help script
 
 ---
 
 ## 📁 Folder Structure
 
+| Folder                | Purpose                            |
+|------------------------|------------------------------------|
+| `~/llama.cpp/`         | llama.cpp source code              |
+| `~/llama.cpp/build/`   | Compiled binary (`main`) here      |
+| `~/llm/`               | Drop your `.gguf` model here       |
+| `~/howtorun`           | Script that explains how to run    |
+
+---
+
+## 🔻 How to Get a Model
+
+### A. Recommended: Hugging Face download via `aria2c`
+
+Example for Mistral 7B:
+
+```bash
+cd ~/llm
+aria2c -x 16 "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.1-GGUF/resolve/main/mistral-7b-instruct-v0.1.Q4_K_S.gguf"
 ```
-~/
-├── llama.cpp/
-│   └── models/
-│       └── mistral-7b.Q4_K_M.gguf
-├── llm/
-│   └── install_mistral.sh
-└── setup.sh
+
+### B. If you already have the model on Android:
+
+Use `scp`, `Termius`, or `X-plore` with SFTP to copy the `.gguf` into `/home/userland/llm/`
+
+---
+
+## 🧠 Run the Model
+
+Make sure you’re in your home directory:
+
+```bash
+cd ~
+./howtorun
+```
+
+This will echo all necessary usage instructions.
+
+---
+
+## 🔁 Quick Reference: Commands
+
+### Single Prompt (one-shot):
+
+```bash
+~/llama.cpp/build/main -m ~/llm/your-model.gguf -p "You are a helpful assistant."
+```
+
+### Interactive Chat Mode:
+
+```bash
+~/llama.cpp/build/main -m ~/llm/your-model.gguf -i
 ```
 
 ---
 
-## 🧠 Requirements
+## ⚙️ Optional Parameters
 
-- Android phone with **4 GB+ RAM** (6–8 GB recommended)
-- [UserLAnd app](https://play.google.com/store/apps/details?id=tech.ula)
-- Ubuntu or Debian session inside UserLAnd
-- 6+ GB free storage
+| Flag                | Description                                  |
+|---------------------|----------------------------------------------|
+| `--ctx-size 2048`   | Increases memory context window              |
+| `--temp 0.7`        | Adjusts creativity/randomness of responses   |
+| `--repeat_penalty`  | Penalizes repetition for coherence           |
+| `--color`           | Enables colored chat output                  |
 
 ---
 
-## 👤 Author
+## 🛠 Troubleshooting
 
-**Tanish Vijay**  
-GitHub: [@tanishdt](https://github.com/tanishdt)
+### DNS not resolving (aria2/wget fails)?
+
+```bash
+echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
+```
+
+### “main: No such file or directory”?
+
+Make sure you've:
+```bash
+cd ~/llama.cpp/build
+cmake ..
+cmake --build . --config Release
+```
+
+---
+
+## 📌 Tips
+
+- Try quantized models like `Q4_K_S.gguf` or `Q2_K.gguf` for low RAM
+- You can alias the run command in `.bashrc` for faster access
+- If you want a simple menu-based `run.sh`, you can add it to this project
+
+---
+
+## 📄 License
+
+MIT License — free to modify, fork, or integrate elsewhere.
+
+---
+
+## ✨ Credits
+
+Maintained by [@tanish.dt](https://github.com/tanish.dt)  
+Based on [llama.cpp](https://github.com/ggerganov/llama.cpp)
