@@ -6,7 +6,8 @@ sudo apt update && sudo apt upgrade -y
 
 echo
 echo "📦 [STEP 2] Installing dependencies..."
-sudo apt install -y git cmake clang build-essential
+sudo apt update && \
+sudo apt install -y git cmake clang build-essential libcurl4-openssl-dev
 
 echo
 echo "📁 [STEP 3] Creating working folders..."
